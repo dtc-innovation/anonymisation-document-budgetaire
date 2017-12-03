@@ -1,0 +1,33 @@
+{
+  "name": "anonymisation-document-budgetaire",
+  "version": "1.0.0",
+  "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.2"
+  },
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register"
+  },
+  "babel": {
+    "presets": ["es2015"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dtc-innovation/anonymisation-document-budgetaire.git"
+  },
+  "keywords": [],
+  "author": "David Bruant <bruant.d@gmail.com> (https://twitter.com/DavidBruant)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dtc-innovation/anonymisation-document-budgetaire/issues"
+  },
+  "homepage": "https://github.com/dtc-innovation/anonymisation-document-budgetaire#readme"
+}
