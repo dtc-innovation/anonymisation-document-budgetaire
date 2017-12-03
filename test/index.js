@@ -54,9 +54,9 @@ describe('anonymize', () => {
         const annexes = '';
         const doc = makeDocBudg(annexes);
         
-        const anonymized = anonymize(doc);
+        anonymize(doc);
 
-        expect(anonymized).to.equal(doc);
+        expect(doc.getElementsByTagName('Annexes')).to.have.length(0);
     })
     
     it('should anonymize the document if there is one physical person name', () => {
@@ -74,9 +74,9 @@ describe('anonymize', () => {
 
         const doc = makeDocBudg(annexes);
         
-        const anonymized = anonymize(doc);
+        anonymize(doc);
 
-        expect( anonymized.getElementsByTagName('LibOrgaBenef')[0].getAttribute('V') ).to.not.equal(NAME);
+        expect( doc.getElementsByTagName('LibOrgaBenef')[0].getAttribute('V') ).to.not.equal(NAME);
     })
     
     it('should anonymize the document if there are several physical person names', () => {
@@ -99,9 +99,10 @@ describe('anonymize', () => {
         </Annexes>`;
 
         const doc = makeDocBudg(annexes);
+
+        anonymize(doc);
         
-        const anonymized = anonymize(doc);
-        const libOrgaBenefs = anonymized.getElementsByTagName('LibOrgaBenef');
+        const libOrgaBenefs = doc.getElementsByTagName('LibOrgaBenef');
 
         expect( libOrgaBenefs[0].getAttribute('V') ).to.equal( libOrgaBenefs[1].getAttribute('V') );
         expect( libOrgaBenefs[0].getAttribute('V') ).to.not.equal( NAME_1 );
@@ -121,9 +122,9 @@ describe('anonymize', () => {
 
         const doc = makeDocBudg(annexes);
         
-        const anonymized = anonymize(doc);
+        anonymize(doc);
 
-        expect( anonymized.getElementsByTagName('LibOrgaBenef')[0].getAttribute('V') ).to.equal(NAME);
+        expect( doc.getElementsByTagName('LibOrgaBenef')[0].getAttribute('V') ).to.equal(NAME);
     })
     
     it('should not do anything if there are subs, but no physical person', () => {
@@ -174,8 +175,8 @@ describe('anonymize', () => {
 
         const doc = makeDocBudg(annexes);
         
-        const anonymized = anonymize(doc);
-        const concours = Array.from(anonymized.getElementsByTagName('CONCOURS'));
+        anonymize(doc);
+        const concours = Array.from(doc.getElementsByTagName('CONCOURS'));
 
         concours.forEach(c => {
             const natJur = c.getElementsByTagName('CodNatJurBenefCA')[0];

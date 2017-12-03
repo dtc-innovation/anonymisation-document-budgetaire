@@ -15,6 +15,4 @@ export default function(doc){
         }
     })
 
-
-    return doc;
 }
