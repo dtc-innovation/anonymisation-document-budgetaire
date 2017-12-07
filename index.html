@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="referrer" value="same-origin">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
+        <title>Anonymisation des fichiers &lt;DocumentBudgetaire> manipulés par Totem</title>
+        
+        <meta name="description" content=" ">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+
+            main, footer{
+                width: 100%;
+                padding: 0 20%;
+            }
+
+            .anony-zone{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: flex-start;
+            }
+
+            .input, .output{
+                border: solid 1px #888;
+                border-radius: 3em;
+                padding: 2em;
+            }
+
+
+        </style>
+
+        <script>
+
+            function anonymize(doc){
+                console.info('anonymize called', doc);
+            }
+
+
+            const BEFORE_ENCODING = `encoding="`;
+            function makeAnonimizedFile(file){
+                
+                // get file to detect encoding
+                return new Promise( (resolve, reject) => {
+                    const reader = new FileReader();  
+                    reader.addEventListener("loadend", e => {
+                        resolve(reader.result);
+                    });
+                    reader.readAsText(file);
+                })
+                // get content with proper encoding
+                .then( badEncodingStr => {
+                    const encodingStartIndex = badEncodingStr.indexOf(BEFORE_ENCODING) + BEFORE_ENCODING.length;
+                    const encodingEndIndex = badEncodingStr.indexOf('"', encodingStartIndex);
+                    const encoding = badEncodingStr.slice(encodingStartIndex, encodingEndIndex);
+
+                    return new Promise( (resolve, reject) => {
+                        const reader = new FileReader();  
+                        reader.addEventListener("loadend", e => {
+                            resolve(reader.result);
+                        });
+                        reader.readAsText(file, encoding);
+                    })
+                })
+                // parse as XML
+                .then( xmlText => {
+                    return (new DOMParser()).parseFromString(xmlText, 'text/xml') 
+                })
+                // anonymize 
+                .then( doc => {
+                    anonymize(doc);
+                    return doc;
+                }) 
+                // serialize
+                .then( doc => {
+                    return (new XMLSerializer()).serializeToString(doc) 
+                });
+                
+            }
+
+            document.addEventListener('DOMContentLoaded', e => {
+                const input = document.body.querySelector('.input input[type="file"]');
+                const output = document.body.querySelector('.output');
+
+                input.addEventListener('input', e => {
+                    // replace <input> with list of files
+                    const files = Array.from(e.target.files);
+
+                    const ulInput = document.createElement('ul');
+                    files.forEach(f => {
+                        const li = document.createElement('li');
+                        li.textContent = f.name;
+                        ulInput.append(li);
+                    })
+
+                    input.replaceWith(ulInput);
+
+                    // create output
+                    const ulOutput = document.createElement('ul');
+
+                    files.forEach(f => {
+                        const {name} = f;
+
+                        const li = document.createElement('li');
+                        li.textContent = name;
+                        ulOutput.append(li);
+
+                        makeAnonimizedFile(f)
+                        .then(str => {
+                            const blob = new Blob([str], {type: 'text/xml'});
+                            const blobUrl = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            
+                            a.setAttribute('href', blobUrl);
+                            a.setAttribute('download', name);
+                            a.textContent = name;
+
+                            li.innerHTML = '';
+
+                            li.append(a);
+                        });
+                    });
+
+                    output.append(ulOutput);
+                })
+
+
+            }, {once: true})
+        </script>
+
+    </head>
+    <body>
+        <main>
+            <h1>Anonymisation des fichiers <code>&lt;DocumentBudgetaire></code> du projet Actes Budgétaires</h1>
+
+            <p>Les fichiers <code>&lt;DocumentBudgetaire></code> contiennent des noms de personne physique. 
+                http://odm-budgetaire.org/
+                Spécifiquement les éléments <code>&lt;CONCOURS></code> dans les Annexes dont l'élément <code>CodNatJurBenef</code> a pour valeur <code>P3</code>
+                http://odm-budgetaire.org/doc-schema/CommunAnnexe_xsd_Complex_Type_ATCodNatJurBenef.html#ATCodNatJurBenef_V
+            </p>
+            <p>Cette page web permet d'anonymiser ces fichiers.</p>
+
+            <div class="anony-zone">
+                <div class="input">
+                    <h2>Déposer vos fichiers ici</h2>
+                    <input type="file" multiple>
+                </div>
+                <div class="output">
+                    <h2>Fichiers anonymisés</h2>
+
+                </div>
+            </div>
+        </main>
+
+
+        <footer>
+            * licence
+            * lien vers code source 
+
+        </footer>
+    </body>
+</html>
