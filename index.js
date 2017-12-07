@@ -1,4 +1,4 @@
-const ANONYMIZED_NAME = "Nom annonymisé";
+const ANONYMIZED_NAME = "Nom anonymisé";
 
 // http://odm-budgetaire.org/doc-schema/CommunAnnexe_xsd_Complex_Type_ATCodNatJurBenef.html#ATCodNatJurBenef_V
 const CodNatJurBenefPersonnesPhysiques = 'P3';
