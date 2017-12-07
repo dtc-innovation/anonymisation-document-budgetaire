@@ -1,4 +1,4 @@
-# anonymisation-document-budgetaire
+# anonymisation-document-budgetaire [![Build Status](https://travis-ci.org/dtc-innovation/anonymisation-document-budgetaire.svg?branch=master)](https://travis-ci.org/dtc-innovation/anonymisation-document-budgetaire)
 
 Outil d'anonymisation de fichiers DocumentBudgetaire
 
