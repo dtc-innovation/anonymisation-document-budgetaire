@@ -3,25 +3,40 @@
   "version": "1.0.0",
   "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.5.0",
     "chai": "*",
+    "minifyify": "^7.3.5",
     "mocha": "*",
     "serve": "^6.4.0",
+    "watchify": "^3.9.0",
     "xmldom": "^0.1.27"
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
-    "serve": "serve"
+    "serve": "serve",
+    "build": "browserify src/js/main.js -o build/bundle.js -p [minifyify --no-map]",
+    "watch": "watchify src/js/main.js -o build/bundle.js -d -v"
   },
   "babel": {
     "presets": [
       "es2015"
+    ]
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
     ]
   },
   "repository": {
