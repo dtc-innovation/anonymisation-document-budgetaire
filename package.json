@@ -10,6 +10,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.5.0",
     "chai": "*",
+    "minifyify": "^7.3.5",
     "mocha": "*",
     "serve": "^6.4.0",
     "watchify": "^3.9.0",
