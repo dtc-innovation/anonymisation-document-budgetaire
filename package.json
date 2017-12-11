@@ -18,7 +18,7 @@
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
-    "serve": "serve",
+    "start": "serve",
     "build": "browserify src/js/main.js -o build/bundle.js -p [minifyify --no-map]",
     "watch": "watchify src/js/main.js -o build/bundle.js -d -v"
   },

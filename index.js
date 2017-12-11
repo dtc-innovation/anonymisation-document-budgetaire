@@ -15,4 +15,13 @@ export default function(doc){
         }
     })
 
+    const prets = Array.from(doc.getElementsByTagName('PRET'))
+
+    prets.forEach(c => {
+        const nomBenefPret = c.getElementsByTagName('NomBenefPret')[0];
+        
+        if(nomBenefPret){
+            nomBenefPret.setAttribute('V', ANONYMIZED_NAME);
+        }
+    })
 }

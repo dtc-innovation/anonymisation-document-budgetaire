@@ -187,5 +187,30 @@ describe('anonymize', () => {
 
     })
 
+    it(`should anonimize all <NomBenefPret>s in all <PRET>s`, () => {
+        const NAME = 'David Bruant';
+        
+        const annexes = `<Annexes>
+            <DATA_PRET>
+                <PRET>
+                    <CodTypPret V="N"/>
+                    <NomBenefPret V="${NAME}"/>
+                    <DtDelib V="2017-12-10"/>
+                    <MtCapitalRestDu_31_12 V="12"/>
+                    <MtCapitalExer V="0.0"/>
+                    <MtIntExer V="0.0"/>
+                </PRET>
+            </DATA_PRET>
+        </Annexes>`;
+
+        const doc = makeDocBudg(annexes);
+        
+        anonymize(doc);
+
+        const nomBenefPret = doc.getElementsByTagName('NomBenefPret')[0].getAttribute('V')
+
+        expect( nomBenefPret ).to.not.equal(NAME);
+    })
+
 });
   
