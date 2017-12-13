@@ -31,6 +31,13 @@
                 border: solid 1px #888;
                 border-radius: 3em;
                 padding: 2em;
+
+                width: 40%;
+                min-height: 9em;
+            }
+
+            h3{
+                margin-top: 0;
             }
 
 
@@ -42,30 +49,39 @@
         <main>
             <h1>Anonymisation des fichiers <code>&lt;DocumentBudgetaire></code> du projet Actes Budgétaires</h1>
 
-            <p>Les fichiers <code>&lt;DocumentBudgetaire></code> contiennent des noms de personne physique. 
-                http://odm-budgetaire.org/
-                Spécifiquement les éléments <code>&lt;CONCOURS></code> dans les Annexes dont l'élément <code>CodNatJurBenef</code> a pour valeur <code>P3</code>
-                http://odm-budgetaire.org/doc-schema/CommunAnnexe_xsd_Complex_Type_ATCodNatJurBenef.html#ATCodNatJurBenef_V
+            <p>
+                Les fichiers <code>&lt;DocumentBudgetaire></code> contiennent des noms de personne physique.
+                La mise en <em lang=en>open data</em> de ces fichiers pourrait porter atteinte à la protection de la vie privée de ces personnes.
             </p>
-            <p>Cette page web permet d'anonymiser ces fichiers.</p>
+            <p>
+                Les éléments anonymisés sont les suivants&nbsp;:
+                <ul>
+                    <li>Eléments <code>&lt;LibOrgaBenef></code> dans des <code>&lt;CONCOURS></code> dont l'enfant <code>&lt;CodNatJurBenef></code> a pour <a href="http://odm-budgetaire.org/doc-schema/CommunAnnexe_xsd_Complex_Type_ATCodNatJurBenef.html#ATCodNatJurBenef_V">valeur <code>P3</code></a>.
+                    
+                    <li>Eléments <code>&lt;NomBenefPret></code> dans les <code>&lt;PRET></code> 
+                </ul>
+
+            </p>
+
+            <h2>Anonymiser quelques fichiers</h2>
 
             <div class="anony-zone">
                 <div class="input">
-                    <h2>Déposer vos fichiers ici</h2>
+                    <h3>Déposer vos fichiers ici</h3>
                     <input type="file" multiple>
                 </div>
                 <div class="output">
-                    <h2>Fichiers anonymisés</h2>
-
+                    <h3>Fichiers anonymisés</h3>
                 </div>
             </div>
         </main>
 
 
         <footer>
-            * licence
-            * lien vers code source 
-
+            <ul>
+                <li>Licence MIT. Utilisations et modifications gratuites.
+                <li><a href="https://github.com/dtc-innovation/anonymisation-document-budgetaire/">Code source</a>
+            </ul>
         </footer>
     </body>
 </html>
