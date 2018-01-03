@@ -25,7 +25,7 @@ readdir(inDir)
             // convert to utf-8
             Array.from(doc.childNodes).forEach(n => {
                 if(n.nodeType === 7 && n.target === 'xml'){ // PROCESSING_INSTRUCTION_NODE
-                    n.data = n.data.replace(/encoding="(.*)"/, 'encoding="utf-8"');
+                    n.data = n.data.replace(/encoding="(.*)"/, 'encoding="UTF-8"');
                 }
             });
 
