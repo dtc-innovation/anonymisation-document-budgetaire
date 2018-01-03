@@ -2,12 +2,26 @@ import {join} from 'path';
 import * as fs from 'fs-extra';
 import {DOMParser, XMLSerializer} from 'xmldom';
 import xmlBufferToString from 'xml-buffer-tostring';
+import program from 'commander';
+import {version} from '../package.json';
 
 import anonymize from '../index.js';
 
 const {readdir, readFile, writeFile} = fs;
 
-const [inDir, outDir] = process.argv.slice(2);
+program
+  .version(version)
+  .usage('--in <dossier> --out <dossier>')
+  .option('-i, --in <dir>', 'Input directory')
+  .option('-o, --out <dir>', 'Output directory')
+  .parse(process.argv);
+
+const {in:inDir, out:outDir} = program;
+
+if (!inDir || !outDir) {
+   console.error('Error: Input and Output directories are mandatory.');
+   program.help();
+}
 
 readdir(inDir)
 .then(files => {

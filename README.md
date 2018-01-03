@@ -8,14 +8,28 @@ Ce dépôt de code contient un module d'anonymisation de fichiers XML de type `<
 
 Installer [Node.js](https://nodejs.org/fr/)
 
-Installer l'outil : 
+Installer l'outil :
 ```bash
 npm install anon-doc-budg -g
 ```
 
-Utiliser : 
+Utiliser :
 ```sh
-anon-doc-budg dossierEntree dossierSortie
+anon-doc-budg --in dossierEntree --out dossierSortie
+```
+
+```sh
+$ anon-doc-budg --help
+
+  Usage: anon-doc-budg --in <dossier> --out <dossier>
+
+
+  Options:
+
+    -V, --version    output the version number
+    -i, --in <dir>   Input directory
+    -o, --out <dir>  Output directory
+    -h, --help       output usage information
 ```
 
 ## Propositions d'amélioration
