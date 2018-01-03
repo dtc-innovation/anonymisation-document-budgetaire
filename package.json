@@ -1,8 +1,8 @@
 {
   "name": "anon-doc-budg",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bin": {
-    "anon-doc-budg" : "./bin/index.js"
+    "anon-doc-budg": "./bin/index.js"
   },
   "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
   "main": "index.js",
