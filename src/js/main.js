@@ -1,6 +1,5 @@
 import anonymize from '../../index.js';
-
-const BEFORE_ENCODING = `encoding="`;
+import detectXMLEncoding from './detectXMLEncoding.js'
 
 function makeAnonimizedFile(file){
     
@@ -14,9 +13,7 @@ function makeAnonimizedFile(file){
     })
     // get content with proper encoding
     .then( badEncodingStr => {
-        const encodingStartIndex = badEncodingStr.indexOf(BEFORE_ENCODING) + BEFORE_ENCODING.length;
-        const encodingEndIndex = badEncodingStr.indexOf('"', encodingStartIndex);
-        const encoding = badEncodingStr.slice(encodingStartIndex, encodingEndIndex);
+        const encoding = detectXMLEncoding(badEncodingStr);
 
         return new Promise( (resolve, reject) => {
             const reader = new FileReader();  
