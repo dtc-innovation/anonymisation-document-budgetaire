@@ -25,7 +25,7 @@ if (!inDir || !outDir) {
 
 readdir(inDir)
 .then(files => {
-    console.log('files', files);
+    console.log('Files found', files);
 
     return Promise.all(files.map(f => {
         return readFile(join(inDir, f))
@@ -49,9 +49,12 @@ readdir(inDir)
             return (new XMLSerializer()).serializeToString(doc);
         })
         .then(str => writeFile(join(outDir, f), str, 'utf-8'));
-    }));
+    }))
+})
+.then(successes => {
+    console.log(`Anonymized ${successes.length} file${successes.length >= 2 ? 's' : ''} successfully!`)
 })
 .catch(err => {
-    console.error('error', err);
+    console.error('Error during processing. Stopping right now.', err);
     process.exit(1);
 });
