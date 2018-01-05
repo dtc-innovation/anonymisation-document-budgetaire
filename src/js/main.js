@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', e => {
     const input = document.body.querySelector('.input input[type="file"]');
     const output = document.body.querySelector('.output');
 
-    input.addEventListener('input', e => {
+    input.addEventListener('change', e => {
         // replace <input> with list of files
         const files = Array.from(e.target.files);
 

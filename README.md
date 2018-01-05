@@ -4,7 +4,13 @@ Outil d'anonymisation de fichiers DocumentBudgetaire
 
 Ce dépôt de code contient un module d'anonymisation de fichiers XML de type `<DocumentBudgetaire>` comme définis par son [XML Schema](http://odm-budgetaire.org/doc-schema/doc-schema.html) ainsi que son encapsulation dans [une page web](https://dtc-innovation.github.io/anonymisation-document-budgetaire/) et dans un outil en ligne de commande.
 
+## Version web
+
+La version web est accessible à cette adresse : https://dtc-innovation.github.io/anonymisation-document-budgetaire/
+
 ## Outil en ligne de commande
+
+Pour utiliser la version en ligne de commande : 
 
 Installer [Node.js](https://nodejs.org/fr/)
 
@@ -32,6 +38,10 @@ $ anon-doc-budg --help
     -h, --help       output usage information
 ```
 
-## Propositions d'amélioration
+# Propositions d'amélioration du format de fichier `<DocumentBudgetaire>`
 
 Des [propositions d'amélioration](propositions%20d'améliorations.md) sont disponibles
+
+# Licence
+
+[MIT](LICENCE)
