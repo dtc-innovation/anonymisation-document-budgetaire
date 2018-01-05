@@ -2,7 +2,10 @@ import {join} from 'path';
 import * as fs from 'fs-extra';
 import {DOMParser, XMLSerializer} from 'xmldom';
 import xmlBufferToString from 'xml-buffer-tostring';
+import chalk from 'chalk';
 import program from 'commander';
+
+
 import {version} from '../package.json';
 
 import anonymize from '../index.js';
@@ -25,7 +28,7 @@ if (!inDir || !outDir) {
 
 readdir(inDir)
 .then(files => {
-    console.log('files', files);
+    console.log(chalk.underline('Files found'), files);
 
     return Promise.all(files.map(f => {
         return readFile(join(inDir, f))
@@ -48,10 +51,19 @@ readdir(inDir)
         .then( doc => {
             return (new XMLSerializer()).serializeToString(doc);
         })
-        .then(str => writeFile(join(outDir, f), str, 'utf-8'));
-    }));
+        .then(str => writeFile(join(outDir, f), str, 'utf-8'))
+        .catch(err => {
+            console.error(chalk.red(`Problem detected with file: ${f}`))
+            console.error(chalk.grey(err));
+            throw err;
+        });
+    }))
+})
+.then(successes => {
+    console.log(chalk.green(`Anonymized ${successes.length} file${successes.length >= 2 ? 's' : ''} successfully!`))
 })
 .catch(err => {
-    console.error('error', err);
+    console.error(chalk.red('Error during processing. Stopping right now.'));
+    console.error(chalk.grey(err));
     process.exit(1);
 });

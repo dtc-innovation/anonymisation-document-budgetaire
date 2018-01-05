@@ -1,13 +1,20 @@
 {
   "name": "anon-doc-budg",
-  "version": "1.1.0",
+  "version": "1.1.1",
+  "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register",
+    "start": "serve",
+    "build": "browserify src/js/main.js -o build/bundle.js -p [minifyify --no-map]",
+    "watch": "watchify src/js/main.js -o build/bundle.js -d -v"
+  },
   "bin": {
     "anon-doc-budg": "./bin/index.js"
   },
-  "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
-  "main": "index.js",
   "dependencies": {
     "@std/esm": "^0.18.0",
+    "chalk": "^2.3.0",
     "commander": "^2.12.2",
     "fs-extra": "^4.0.2",
     "xml-buffer-tostring": "^0.2.0",
@@ -23,12 +30,6 @@
     "mocha": "*",
     "serve": "^6.4.0",
     "watchify": "^3.9.0"
-  },
-  "scripts": {
-    "test": "mocha --compilers js:babel-core/register",
-    "start": "serve",
-    "build": "browserify src/js/main.js -o build/bundle.js -p [minifyify --no-map]",
-    "watch": "watchify src/js/main.js -o build/bundle.js -d -v"
   },
   "babel": {
     "presets": [
