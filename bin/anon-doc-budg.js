@@ -1,16 +1,21 @@
-import {join} from 'path';
-import * as fs from 'fs-extra';
+#!/usr/bin/env node
+
+import {join, dirname} from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs-extra';
 import {DOMParser, XMLSerializer} from 'xmldom';
 import xmlBufferToString from 'xml-buffer-tostring';
 import chalk from 'chalk';
 import program from 'commander';
 
-
-import {version} from '../package.json';
-
 import anonymize from '../index.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const {readdir, readFile, writeFile} = fs;
+
+const {version} = JSON.parse(await readFile(join(__dirname, '../package.json'), 'utf-8'));
 
 program
   .version(version)

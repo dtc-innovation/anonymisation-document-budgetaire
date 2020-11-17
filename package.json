@@ -2,6 +2,8 @@
   "name": "anon-doc-budg",
   "version": "1.1.1",
   "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
+  "type": "module",
+  "engines" : { "node" : ">=14" },
   "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-core/register",
@@ -10,12 +12,11 @@
     "watch": "watchify src/js/main.js -o build/bundle.js -d -v"
   },
   "bin": {
-    "anon-doc-budg": "./bin/index.js"
+    "anon-doc-budg": "bin/anon-doc-budg.js"
   },
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
-    "esm": "^3.0.61",
     "fs-extra": "^7.0.1",
     "xml-buffer-tostring": "^0.2.0",
     "xmldom": "^0.1.27"
@@ -36,12 +37,6 @@
       "env"
     ]
   },
-  "esm": {
-    "mode": "auto",
-    "cjs": {
-      "namedExports": true
-    }
-  },
   "browserify": {
     "transform": [
       [
@@ -60,7 +55,7 @@
   },
   "keywords": [],
   "author": "David Bruant <bruant.d@gmail.com> (https://twitter.com/DavidBruant)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dtc-innovation/anonymisation-document-budgetaire/issues"
   },
