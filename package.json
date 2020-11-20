@@ -3,10 +3,13 @@
   "version": "1.1.1",
   "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
   "type": "module",
-  "engines" : { "node" : ">=14" },
+  "engines": {
+    "node": ">=14"
+  },
   "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-core/register",
+    "benchmark": "node benchmark/main.js",
     "start": "serve",
     "build": "browserify src/js/main.js -o build/bundle.js -p [minifyify --no-map]",
     "watch": "watchify src/js/main.js -o build/bundle.js -d -v"
@@ -30,6 +33,7 @@
     "minifyify": "^7.3.5",
     "mocha": "^5.2.0",
     "serve": "^9.1.0",
+    "tmp-promise": "^3.0.2",
     "watchify": "^3.11.0"
   },
   "babel": {
