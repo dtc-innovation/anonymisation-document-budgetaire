@@ -32,7 +32,7 @@
     "chai": "^4.2.0",
     "minifyify": "^7.3.5",
     "mocha": "^5.2.0",
-    "serve": "^9.1.0",
+    "serve": "^10.1.2",
     "tmp-promise": "^3.0.2",
     "watchify": "^3.11.0"
   },
