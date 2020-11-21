@@ -1,22 +1,17 @@
+import {promisify} from 'util'
 import {join, dirname} from 'path';
-import { dir } from 'tmp-promise'
 import { fileURLToPath } from 'url';
 import { promises } from 'fs';
+import {exec as execCb} from 'child_process'
+
+import { dir } from 'tmp-promise'
+
+const exec = promisify(execCb);
 
 const {link, readdir, copyFile} = promises;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-/*
-
-- [ ] Créer un dossier de source dans /tmp
-    - [ ] y mettre le nombre de fichiers `<DocumentBudgetaire>` à tester
-- [ ] Créer un dossier de destination dans /tmp
-- [ ] lancer l'outil d'anonymisation
-- [ ] Enregistrer le temps d'execution
-- [ ] Supprimer tous les dossiers et fichiers
-
-*/
 
 
 /**
@@ -46,9 +41,6 @@ function fillSourceDir(sourceDirPath, number = 10){
 
                 return Promise.all(sourceFilePaths.map((pathToCreate, i) => {
                     const fileToLink = linkableExampleFilePaths[i % linkableExampleFilePaths.length];
-                    console.log('pathToCreate', pathToCreate, i)
-
-
                     return link(fileToLink, pathToCreate)
                 }))
             })  
@@ -60,12 +52,26 @@ function fillSourceDir(sourceDirPath, number = 10){
 const sourceDirP = dir({unsafeCleanup: true})
 const destinationDirP = dir({unsafeCleanup: true})
 
+const NUMBER_FILES = 80;
+
 Promise.all([sourceDirP, destinationDirP])
 .then(([sourceDir, destinationDir]) => {
-    console.info(`Dossiers source et destination`, sourceDir, destinationDir);
+    console.info(`Dossier source: `, sourceDir.path, `\nDossier destination: `, destinationDir.path);
 
-    return fillSourceDir(sourceDir.path).then(() => {
-        return Promise.all([sourceDir.cleanup(), destinationDir.cleanup()])
-    })    
+    return fillSourceDir(sourceDir.path, NUMBER_FILES).then(() => {
+        const binPath = join(__dirname, `../bin/anon-doc-budg.js`)
+
+        const command = `${binPath} --in ${sourceDir.path} --out ${destinationDir.path}`
+        const timerString = `benchmark anonymisation ${NUMBER_FILES}`
+        console.time(timerString)
+        return new Promise((res, rej) => {
+            const {child} = exec(command);
+
+            child.on('error', rej)
+            child.on('exit', res)
+        })
+        .then(() => console.timeEnd(timerString))
+    })
+    //.then( () => Promise.all([sourceDir.cleanup(), destinationDir.cleanup()]) )
 })
 .catch(err => console.error('end', err))
