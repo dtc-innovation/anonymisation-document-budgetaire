@@ -31,10 +31,10 @@
     "browserify": "^14.5.0",
     "chai": "^4.2.0",
     "minifyify": "^7.3.5",
-    "mocha": "^5.2.0",
-    "serve": "^9.1.0",
+    "mocha": "^8.2.1",
+    "serve": "^11.3.2",
     "tmp-promise": "^3.0.2",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.1"
   },
   "babel": {
     "presets": [
