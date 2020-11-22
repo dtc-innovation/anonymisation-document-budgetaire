@@ -52,7 +52,7 @@ function fillSourceDir(sourceDirPath, number = 10){
 const sourceDirP = dir({unsafeCleanup: true})
 const destinationDirP = dir({unsafeCleanup: true})
 
-const NUMBER_FILES = 80;
+const NUMBER_FILES = 10;
 
 Promise.all([sourceDirP, destinationDirP])
 .then(([sourceDir, destinationDir]) => {
