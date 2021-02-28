@@ -69,3 +69,52 @@ Créer une "fenêtre" de 5-10 fichiers qui sont traités simultanément pour que
 1 minute pour 10 fichiers, ça donne :
 - ~4h de calcul machine (quelques minutes de temps humain pour lancer le script et constater que ça s'est bien passé) pour 2000 fichiers, ce qui semble très acceptable pour une opération qui a besoin d'avoir lieu une fois par an
 - ~7 jours (10000 minutes) de temps de calcul pour 100000 fichiers... ce qui fait un peu beaucoup, mais ptèt que c'est ok ne de pas faire les 100000 d'un coup. Une discussion pour une autre fois 
+
+
+# Rapport de benchmark du 28 février 2021
+
+J'ai fait 2 changements :
+- les fichiers sont chargés par fenêtre glissante de 10 parallèlement
+- pris des fichiers plus petits pour le benchmark
+
+
+## Crash résolu
+
+Après le changement sur le chargement des fichiers, le crash à 80 fichiers n'existe plus
+
+J'ai testé de faire tourner l'outil sur 600 fichiers et ça a tourné sans aucun problème
+
+Je n'ai pas testé sur plus que ça, mais il n'y a plus aucun signe de limite de fichiers (il n'y a plus de ralentissements, etc.)
+
+Temps d'anonymisation en fonction du nombre de fichiers
+10 fichiers: 1:03 
+20 fichiers: 2:06
+40 fichiers: 4:15
+60 fichiers: 7:03
+80 fichiers: 9:15
+100 fichiers: 11:13
+200 fichiers: 23:25
+600 fichiers: 1:02:58
+
+
+## Changements des fichiers de benchmark
+
+J'ai eu une intuition que le nombre de méga-octets est une meilleure base de mesure pour la performance quele nombre de fichiers
+
+J'ai changé les fichiers du benchmark (passant d'un total 74.1Mo sur les 5 fichiers à 5 autres fichiers totalisant 49Mo) et j'ai pu confirmé cette intuition
+
+Nouveaux temps sur mon ordi : 
+10 fichiers : 40s
+50 fichiers : 3:14 (194s)
+100 fichiers : 6:40 (400s)
+
+**Sur ma machine, l'anonymisation se fait à la vitesse de 0.4s/Mo**
+
+
+## Extrapolation
+
+Imaginons un ensemble de fichiers à anonymiser de 2To
+
+Il faudrait 800000 secondes (= ~9 jours et 6 heures)
+
+
