@@ -22,6 +22,7 @@ const __dirname = dirname(__filename);
  * @param {*} number 
  */
 function fillSourceDir(sourceDirPath, number = 10){
+    console.log('creating', number, '<DocumentBudgetaire> files in', sourceDirPath)
     const exampleFileDirPath = join(__dirname, `./data`)
 
     // copy the 5 reference files in a tmp directory
@@ -52,13 +53,14 @@ function fillSourceDir(sourceDirPath, number = 10){
 const sourceDirP = dir({unsafeCleanup: true})
 const destinationDirP = dir({unsafeCleanup: true})
 
-const NUMBER_FILES = 10;
+const NUMBER_FILES = 100;
 
 Promise.all([sourceDirP, destinationDirP])
 .then(([sourceDir, destinationDir]) => {
     console.info(`Dossier source: `, sourceDir.path, `\nDossier destination: `, destinationDir.path);
 
     return fillSourceDir(sourceDir.path, NUMBER_FILES).then(() => {
+        console.log(NUMBER_FILES, 'files created')
         const binPath = join(__dirname, `../bin/anon-doc-budg.js`)
 
         const command = `${binPath} --in ${sourceDir.path} --out ${destinationDir.path}`
