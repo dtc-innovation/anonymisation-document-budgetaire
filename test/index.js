@@ -4,8 +4,17 @@ import {DOMParser, XMLSerializer} from 'xmldom';
 
 import anonymize from '../index.js';
 
+const defaultBlocBudget = `<BlocBudget>
+    <NatDec V="09"/>
+    <Exer V="2016"/>
+    <BudgPrec V="1"/>
+    <ReprRes V="1"/>
+    <NatFonc V="3"/>
+    <CodTypBud V="P"/>
+</BlocBudget>`
 
-function makeDocBudg(annexes){
+
+function makeDocBudg(annexes = '', blocBudget = defaultBlocBudget){
     const xmlStr = `<?xml version="1.0" encoding="UTF-8"?>
     <DocumentBudgetaire xsi:schemaLocation="http://www.minefi.gouv.fr/cp/demat/docbudgetaire Actes_budgetaires___Schema_Annexes_Bull_V15\DocumentBudgetaire.xsd" xmlns="http://www.minefi.gouv.fr/cp/demat/docbudgetaire" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <VersionSchema V="81"/>
@@ -23,14 +32,7 @@ function makeDocBudg(annexes){
              <CodBud V="00"/>
              <Nomenclature V="M14-M14_COM_500_3500"/>
           </EnTeteBudget>
-          <BlocBudget>
-             <NatDec V="09"/>
-             <Exer V="2016"/>
-             <BudgPrec V="1"/>
-             <ReprRes V="1"/>
-             <NatFonc V="3"/>
-             <CodTypBud V="P"/>
-          </BlocBudget>
+          ${blocBudget}
           <InformationsGenerales/>
           <LigneBudget>
             <CodRD V="D"/>
@@ -209,6 +211,36 @@ describe('anonymize', () => {
 
         expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
     })
+
+    
+    it('should occult all Budget > BlocBudget > PJRef > NomPJ[V]', () => {
+        const PJ_NAME_1 = "Yo.pdf";
+        const PJ_NAME_2 = "Document joint";
+        
+        const blocBudget = `<BlocBudget>
+            <NatDec V="09"/>
+            <Exer V="2016"/>
+            <BudgPrec V="1"/>
+            <ReprRes V="1"/>
+            <NatFonc V="3"/>
+            <CodTypBud V="P"/>
+            <PJRef>
+                <NomPJ V="${PJ_NAME_1}"/>
+            </PJRef>
+            <PJRef>
+                <NomPJ V="${PJ_NAME_2}"/>
+            </PJRef>
+        </BlocBudget>`
+
+        const doc = makeDocBudg(undefined, blocBudget);
+        
+        anonymize(doc);
+
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(PJ_NAME_1);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(PJ_NAME_2);
+    })
+
+
 
 });
   

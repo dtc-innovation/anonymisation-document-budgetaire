@@ -3,7 +3,6 @@ const CodNatJurBenefPersonnesPhysiques = 'P3';
 
 export default function(doc, OCCULTATION_STRING = "Occultation Article L311-7 CRPA"){
     const concours = Array.from(doc.getElementsByTagName('CONCOURS'));
-
     concours.forEach(c => {
         const natJurEl = c.getElementsByTagName('CodNatJurBenefCA')[0];
         
@@ -14,12 +13,21 @@ export default function(doc, OCCULTATION_STRING = "Occultation Article L311-7 CR
     })
 
     const prets = Array.from(doc.getElementsByTagName('PRET'))
-
     prets.forEach(c => {
         const nomBenefPret = c.getElementsByTagName('NomBenefPret')[0];
         
         if(nomBenefPret){
             nomBenefPret.setAttribute('V', OCCULTATION_STRING);
+        }
+    })
+
+    const BlocBudget = doc.getElementsByTagName('BlocBudget')[0];
+    const PJRefs = Array.from(BlocBudget.getElementsByTagName('PJRef'));
+    PJRefs.forEach(pjref => {
+        const NomPJ = pjref.getElementsByTagName('NomPJ')[0];
+        
+        if(NomPJ){
+            NomPJ.setAttribute('V', OCCULTATION_STRING);
         }
     })
 }
