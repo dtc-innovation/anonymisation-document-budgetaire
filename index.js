@@ -30,4 +30,9 @@ export default function(doc, OCCULTATION_STRING = "Occultation Article L311-7 CR
             NomPJ.setAttribute('V', OCCULTATION_STRING);
         }
     })
+
+    const Champ_Editeurs = Array.from(doc.getElementsByTagName('Champ_Editeur'));
+    Champ_Editeurs.forEach(ce => {
+        ce.setAttribute('V', OCCULTATION_STRING);
+    })
 }

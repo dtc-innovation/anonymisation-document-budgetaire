@@ -240,6 +240,38 @@ describe('anonymize', () => {
         expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(PJ_NAME_2);
     })
 
+    
+    it('should occult all Champ_Editeur[V]', () => {
+        const CHAMP_EDITEUR_1 = "srbdtyndu,yu";
+        const CHAMP_EDITEUR_2 = "16151651681653";
+        const CHAMP_EDITEUR_3 = "ù$*ù*ù$";
+        
+        const annexes = `<Annexes>
+            <DATA_EMPRUNT>
+                <EMPRUNT>
+                    <Champ_Editeur V="${CHAMP_EDITEUR_1}"/>
+                </EMPRUNT>
+            </DATA_EMPRUNT>
+            <DATA_TRESORERIE>
+                <TRESORERIE>
+                    <Champ_Editeur V="${CHAMP_EDITEUR_2}"/>
+                </TRESORERIE>
+            </DATA_TRESORERIE>
+            <DATA_CHARGE>
+                <CHARGE>
+                    <Champ_Editeur V="${CHAMP_EDITEUR_3}"/>
+                </CHARGE>
+            </DATA_CHARGE>
+        </Annexes>`;
+
+        const doc = makeDocBudg(annexes);
+        
+        anonymize(doc);
+
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_1);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_2);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_3);
+    })
 
 
 });
