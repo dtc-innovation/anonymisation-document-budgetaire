@@ -4,8 +4,17 @@ import {DOMParser, XMLSerializer} from 'xmldom';
 
 import anonymize from '../index.js';
 
+const defaultBlocBudget = `<BlocBudget>
+    <NatDec V="09"/>
+    <Exer V="2016"/>
+    <BudgPrec V="1"/>
+    <ReprRes V="1"/>
+    <NatFonc V="3"/>
+    <CodTypBud V="P"/>
+</BlocBudget>`
 
-function makeDocBudg(annexes){
+
+function makeDocBudg(annexes = '', blocBudget = defaultBlocBudget){
     const xmlStr = `<?xml version="1.0" encoding="UTF-8"?>
     <DocumentBudgetaire xsi:schemaLocation="http://www.minefi.gouv.fr/cp/demat/docbudgetaire Actes_budgetaires___Schema_Annexes_Bull_V15\DocumentBudgetaire.xsd" xmlns="http://www.minefi.gouv.fr/cp/demat/docbudgetaire" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
        <VersionSchema V="81"/>
@@ -23,14 +32,7 @@ function makeDocBudg(annexes){
              <CodBud V="00"/>
              <Nomenclature V="M14-M14_COM_500_3500"/>
           </EnTeteBudget>
-          <BlocBudget>
-             <NatDec V="09"/>
-             <Exer V="2016"/>
-             <BudgPrec V="1"/>
-             <ReprRes V="1"/>
-             <NatFonc V="3"/>
-             <CodTypBud V="P"/>
-          </BlocBudget>
+          ${blocBudget}
           <InformationsGenerales/>
           <LigneBudget>
             <CodRD V="D"/>
@@ -76,7 +78,7 @@ describe('anonymize', () => {
         
         anonymize(doc);
 
-        expect( doc.getElementsByTagName('LibOrgaBenef')[0].getAttribute('V') ).to.not.equal(NAME);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
     })
     
     it('should anonymize the document if there are several physical person names', () => {
@@ -105,10 +107,10 @@ describe('anonymize', () => {
         const libOrgaBenefs = doc.getElementsByTagName('LibOrgaBenef');
 
         expect( libOrgaBenefs[0].getAttribute('V') ).to.equal( libOrgaBenefs[1].getAttribute('V') );
-        expect( libOrgaBenefs[0].getAttribute('V') ).to.not.equal( NAME_1 );
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME_1);
     })
     
-    it('should not do anything if there is no <CodNatJurBenefCA> in the <CONCOURS>', () => {
+    it('should anonymize if there is no <CodNatJurBenefCA> in the <CONCOURS>', () => {
         const NAME = "Asso dtc";
         
         const annexes = `<Annexes>
@@ -124,7 +126,7 @@ describe('anonymize', () => {
         
         anonymize(doc);
 
-        expect( doc.getElementsByTagName('LibOrgaBenef')[0].getAttribute('V') ).to.equal(NAME);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
     })
     
     it('should not do anything if there are subs, but no physical person', () => {
@@ -187,7 +189,7 @@ describe('anonymize', () => {
 
     })
 
-    it(`should anonimize all <NomBenefPret>s in all <PRET>s`, () => {
+    it(`should anonymize all <NomBenefPret>s in all <PRET>s`, () => {
         const NAME = 'David Bruant';
         
         const annexes = `<Annexes>
@@ -207,9 +209,86 @@ describe('anonymize', () => {
         
         anonymize(doc);
 
-        const nomBenefPret = doc.getElementsByTagName('NomBenefPret')[0].getAttribute('V')
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
+    })
 
-        expect( nomBenefPret ).to.not.equal(NAME);
+    
+    it('should occult all Budget > BlocBudget > PJRef > NomPJ[V]', () => {
+        const PJ_NAME_1 = "Yo.pdf";
+        const PJ_NAME_2 = "Document joint";
+        
+        const blocBudget = `<BlocBudget>
+            <NatDec V="09"/>
+            <Exer V="2016"/>
+            <BudgPrec V="1"/>
+            <ReprRes V="1"/>
+            <NatFonc V="3"/>
+            <CodTypBud V="P"/>
+            <PJRef>
+                <NomPJ V="${PJ_NAME_1}"/>
+            </PJRef>
+            <PJRef>
+                <NomPJ V="${PJ_NAME_2}"/>
+            </PJRef>
+        </BlocBudget>`
+
+        const doc = makeDocBudg(undefined, blocBudget);
+        
+        anonymize(doc);
+
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(PJ_NAME_1);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(PJ_NAME_2);
+    })
+
+    
+    it('should occult all Champ_Editeur[V]', () => {
+        const CHAMP_EDITEUR_1 = "srbdtyndu,yu";
+        const CHAMP_EDITEUR_2 = "16151651681653";
+        const CHAMP_EDITEUR_3 = "ù$*ù*ù$";
+        
+        const annexes = `<Annexes>
+            <DATA_EMPRUNT>
+                <EMPRUNT>
+                    <Champ_Editeur V="${CHAMP_EDITEUR_1}"/>
+                </EMPRUNT>
+            </DATA_EMPRUNT>
+            <DATA_TRESORERIE>
+                <TRESORERIE>
+                    <Champ_Editeur V="${CHAMP_EDITEUR_2}"/>
+                </TRESORERIE>
+            </DATA_TRESORERIE>
+            <DATA_CHARGE>
+                <CHARGE>
+                    <Champ_Editeur V="${CHAMP_EDITEUR_3}"/>
+                </CHARGE>
+            </DATA_CHARGE>
+        </Annexes>`;
+
+        const doc = makeDocBudg(annexes);
+        
+        anonymize(doc);
+
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_1);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_2);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_3);
+    })
+
+    it(`should anonymize all <Proprietaire>s in all <MEMBREASA>s`, () => {
+        const NAME = 'David Bruant';
+        
+        const annexes = `<Annexes>
+            <DATA_MEMBRESASA>
+                <MEMBREASA>
+                    <Proprietaire V="${NAME}"/>
+                </MEMBREASA>
+            </DATA_MEMBRESASA>
+        </Annexes>`;
+
+        const doc = makeDocBudg(annexes);
+        
+        anonymize(doc);
+
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
     })
 
 });

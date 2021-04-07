@@ -1,6 +1,6 @@
 {
   "name": "anon-doc-budg",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Outil d'anonymisation de fichiers DocumentBudgetaire",
   "type": "module",
   "engines": {
@@ -23,7 +23,7 @@
     "fs-extra": "^7.0.1",
     "p-limit": "^3.1.0",
     "xml-buffer-tostring": "^0.2.0",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.5.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
