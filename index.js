@@ -35,4 +35,13 @@ export default function(doc, OCCULTATION_STRING = "Occultation Article L311-7 CR
     Champ_Editeurs.forEach(ce => {
         ce.setAttribute('V', OCCULTATION_STRING);
     })
+
+    const MEMBREASAs = Array.from(doc.getElementsByTagName('MEMBREASA'))
+    MEMBREASAs.forEach(masa => {
+        const Proprietaire = masa.getElementsByTagName('Proprietaire')[0];
+        
+        if(Proprietaire){
+            Proprietaire.setAttribute('V', OCCULTATION_STRING);
+        }
+    })
 }

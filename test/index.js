@@ -273,6 +273,23 @@ describe('anonymize', () => {
         expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(CHAMP_EDITEUR_3);
     })
 
+    it(`should anonymize all <Proprietaire>s in all <MEMBREASA>s`, () => {
+        const NAME = 'David Bruant';
+        
+        const annexes = `<Annexes>
+            <DATA_MEMBRESASA>
+                <MEMBREASA>
+                    <Proprietaire V="${NAME}"/>
+                </MEMBREASA>
+            </DATA_MEMBRESASA>
+        </Annexes>`;
+
+        const doc = makeDocBudg(annexes);
+        
+        anonymize(doc);
+
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
+    })
 
 });
   
