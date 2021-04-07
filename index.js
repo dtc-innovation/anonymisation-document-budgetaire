@@ -9,7 +9,7 @@ export default function(doc){
     concours.forEach(c => {
         const natJurEl = c.getElementsByTagName('CodNatJurBenefCA')[0];
         
-        if(natJurEl && natJurEl.getAttribute('V') === CodNatJurBenefPersonnesPhysiques){
+        if(!natJurEl || natJurEl.getAttribute('V') === CodNatJurBenefPersonnesPhysiques){
             const libOrgaBenef = c.getElementsByTagName('LibOrgaBenef')[0];
             libOrgaBenef.setAttribute('V', ANONYMIZED_NAME);
         }

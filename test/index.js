@@ -108,7 +108,7 @@ describe('anonymize', () => {
         expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME_1);
     })
     
-    it.skip('should not do anything if there is no <CodNatJurBenefCA> in the <CONCOURS>', () => {
+    it('should anonymize if there is no <CodNatJurBenefCA> in the <CONCOURS>', () => {
         const NAME = "Asso dtc";
         
         const annexes = `<Annexes>
@@ -124,7 +124,7 @@ describe('anonymize', () => {
         
         anonymize(doc);
 
-        expect( (new XMLSerializer()).serializeToString(doc) ).to.include(NAME);
+        expect( (new XMLSerializer()).serializeToString(doc) ).to.not.include(NAME);
     })
     
     it('should not do anything if there are subs, but no physical person', () => {
