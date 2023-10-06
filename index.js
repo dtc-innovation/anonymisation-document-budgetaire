@@ -5,6 +5,38 @@ export default function (
   doc,
   OCCULTATION_STRING = "Occultation Article L311-7 CRPA"
 ) {
+  const provisions = Array.from(doc.getElementsByTagName("PROVISION"));
+  provisions.forEach((c) => {
+    const LibNatProv = c.getElementsByTagName("LibNatProv")[0];
+    if (LibNatProv) {
+      LibNatProv.setAttribute("V", OCCULTATION_STRING);
+    }
+    const LibObjProv = c.getElementsByTagName("LibObjProv")[0];
+    if (LibObjProv) {
+      LibObjProv.setAttribute("V", OCCULTATION_STRING);
+    }
+  });
+
+  const personnels = Array.from(doc.getElementsByTagName("PERSONNEL"));
+  personnels.forEach((c) => {
+    const RemunAgent = c.getElementsByTagName("RemunAgent")[0];
+    if (RemunAgent) {
+      RemunAgent.setAttribute("V", OCCULTATION_STRING);
+    }
+  });
+
+  const engagements = Array.from(doc.getElementsByTagName("ORGANISME_ENG"));
+  engagements.forEach((c) => {
+    const NomOrgEng = c.getElementsByTagName("NomOrgEng")[0];
+    if (NomOrgEng) {
+      NomOrgEng.setAttribute("V", OCCULTATION_STRING);
+    }
+    const RSOrgEng = c.getElementsByTagName("RSOrgEng")[0];
+    if (RSOrgEng) {
+      RSOrgEng.setAttribute("V", OCCULTATION_STRING);
+    }
+  });
+
   const concours = Array.from(doc.getElementsByTagName("CONCOURS"));
   concours.forEach((c) => {
     const CodNatJurBenefCA = c.getElementsByTagName("CodNatJurBenefCA")[0];
@@ -17,6 +49,18 @@ export default function (
       if (LibOrgaBenef) {
         LibOrgaBenef.setAttribute("V", OCCULTATION_STRING);
       }
+      const DenomOuNumSubv = c.getElementsByTagName("DenomOuNumSubv")[0];
+      if (DenomOuNumSubv) {
+        DenomOuNumSubv.setAttribute("V", OCCULTATION_STRING);
+      }
+      const LibPrestaNat = c.getElementsByTagName("LibPrestaNat")[0];
+      if (LibPrestaNat) {
+        LibPrestaNat.setAttribute("V", OCCULTATION_STRING);
+      }
+      const ObjSubv = c.getElementsByTagName("ObjSubv")[0];
+      if (ObjSubv) {
+        ObjSubv.setAttribute("V", OCCULTATION_STRING);
+      }
     }
   });
 
@@ -25,6 +69,40 @@ export default function (
     const NomBenefPret = c.getElementsByTagName("NomBenefPret")[0];
     if (NomBenefPret) {
       NomBenefPret.setAttribute("V", OCCULTATION_STRING);
+    }
+  });
+
+  const autresEngagements = Array.from(
+    doc.getElementsByTagName("AUTRE_ENGAGEMENT")
+  );
+  autresEngagements.forEach((c) => {
+    const CodTypPersoMorale = c.getElementsByTagName("CodTypPersoMorale")[0];
+
+    if (CodTypPersoMorale.getAttribute("V") !== "U") {
+      const NomOrgaBenef = c.getElementsByTagName("NomOrgaBenef")[0];
+      if (NomOrgaBenef) {
+        NomOrgaBenef.setAttribute("V", OCCULTATION_STRING);
+      }
+      const NatEng = c.getElementsByTagName("NatEng")[0];
+      if (NatEng) {
+        NatEng.setAttribute("V", OCCULTATION_STRING);
+      }
+    }
+  });
+
+  const credits_bails = Array.from(doc.getElementsByTagName("CREDIT_BAIL"));
+  credits_bails.forEach((c) => {
+    const LibCredBail = c.getElementsByTagName("LibCredBail")[0];
+    if (LibCredBail) {
+      LibCredBail.setAttribute("V", OCCULTATION_STRING);
+    }
+  });
+
+  const dettes = Array.from(doc.getElementsByTagName("DETTE"));
+  dettes.forEach((c) => {
+    const LibTypDette = c.getElementsByTagName("LibTypDette")[0];
+    if (LibTypDette) {
+      LibTypDette.setAttribute("V", OCCULTATION_STRING);
     }
   });
 
