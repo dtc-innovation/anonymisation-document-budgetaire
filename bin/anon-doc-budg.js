@@ -4,7 +4,7 @@ import {join, dirname} from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 
-import {DOMParser, XMLSerializer} from 'xmldom';
+import {DOMParser, XMLSerializer} from '@xmldom/xmldom';
 import xmlBufferToString from 'xml-buffer-tostring';
 import chalk from 'chalk';
 import program from 'commander';
